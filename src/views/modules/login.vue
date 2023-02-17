@@ -83,11 +83,9 @@ export default {
       isRememb: false,
       dataRule: {
         account: [
-          { required: true, message: this.$t('common.ruleLimitTips'), trigger: 'blur' },
           { validator: validateAccount, trigger: 'blur', min: 8, max: 20 }
         ],
         password: [
-          { required: true, message: this.$t('common.ruleLimitTips'), trigger: 'blur' },
           { validator: validatePassword, trigger: 'blur', min: 8, max: 20 }
         ]
       }
@@ -98,26 +96,48 @@ export default {
     dataFormSubmit () {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.$cookie.set('token', 'token')
-          this.$cookie.set('userId', 'userId')
-          this.$cookie.set('account', this.dataForm.account)
+          if (this.isRememb) {
+            localStorage.setItem('token', 'token')
+            localStorage.setItem('userId', 'userId')
+            localStorage.setItem('account', this.dataForm.account)
+          } else {
+            sessionStorage.setItem('token', 'token')
+            sessionStorage.setItem('userId', 'userId')
+            sessionStorage.setItem('account', this.dataForm.account)
+          }
+          this.$store.commit('user/updateId', 'userId')
+          this.$store.commit('user/updateAccount', this.dataForm.account)
           this.$router.replace({ name: 'home' })
           // const params = { ...this.dataForm }
           // this.loading = true
           // loginIn(params).then(({ data }) => {
           //   this.loading = false
           //   if (data && data.success === true) {
-          //     let cookieDate = new Date(2038, 8, 8)
           //     if (this.isRememb) {
-          //       this.$cookie.set('token', data.data.token, { expires: cookieDate })
-          //       this.$cookie.set('userId', data.data.employeeId, { expires: cookieDate })
-          //       this.$cookie.set('account', this.dataForm.account, { expires: cookieDate })
+          //       localStorage.setItem('token', 'token')
+          //       localStorage.setItem('userId', 'userId')
+          //       localStorage.setItem('account', this.dataForm.account)
+          //     } else {
+          //       sessionStorage.setItem('token', 'token')
+          //       sessionStorage.setItem('userId', 'userId')
+          //       sessionStorage.setItem('account', this.dataForm.account)
           //     }
+          //     this.$store.commit('user/updateId', 'userId')
+          //     this.$store.commit('user/updateAccount', this.dataForm.account)
           //     this.$router.replace({ name: 'home' })
           //   } else {
           //     this.$message.error(data.message)
           //   }
           // })
+        }
+      })
+    }
+  },
+  watch: {
+    '$store.state.common.language' () {
+      this.$refs['dataForm'].fields.forEach(item => {
+        if (item.validateState === 'error') {
+          this.$refs['dataForm'].validateField(item.labelFor)
         }
       })
     }

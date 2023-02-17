@@ -41,6 +41,15 @@
           <div class="input-pre-text" slot="prepend">{{ $t('register.confirmPassword') }}</div>
         </el-input>
       </el-form-item>
+      <el-form-item prop="email">
+        <el-input
+          v-model.trim="dataForm.email"
+          clearable
+          :placeholder="$t('common.emailLimitTips')"
+        >
+          <div class="input-pre-text" slot="prepend">{{ $t('register.email') }}</div>
+        </el-input>
+      </el-form-item>
       <el-form-item>
         <div class="btn-wrap">
           <el-button
@@ -57,6 +66,7 @@
 
 <script>
 import { register } from '@/api/account'
+import { isEmpty } from '@/utils'
 import { isUserName, isPassWord } from '@/utils/validate'
 export default {
   data () {
@@ -81,25 +91,33 @@ export default {
         callback()
       }
     }
+    let validateEmpty = (rule, value, callback) => {
+      if (isEmpty(value)) {
+        callback(new Error(this.$t('common.ruleLimitTips')))
+      } else {
+        callback()
+      }
+    }
     return {
       loading: false,
       dataForm: {
         account: '',
         password: '',
-        agePassword: ''
+        agePassword: '',
+        email: ''
       },
       dataRule: {
         account: [
-          { required: true, message: this.$t('common.ruleLimitTips'), trigger: 'blur' },
           { validator: validateAccount, trigger: 'blur', min: 8, max: 20 }
         ],
         password: [
-          { required: true, message: this.$t('common.ruleLimitTips'), trigger: 'blur' },
           { validator: validatePassword, trigger: 'blur', min: 8, max: 20 }
         ],
         agePassword: [
-          { required: true, message: this.$t('common.ruleLimitTips'), trigger: 'blur' },
           { validator: validateAgePassword, trigger: 'blur', min: 8, max: 20 }
+        ],
+        email: [
+          { validator: validateEmpty, trigger: 'blur' }
         ]
       }
     }
@@ -123,6 +141,15 @@ export default {
         }
       })
     }
+  },
+  watch: {
+    '$store.state.common.language' () {
+      this.$refs['dataForm'].fields.forEach(item => {
+        if (item.validateState === 'error') {
+          this.$refs['dataForm'].validateField(item.labelFor)
+        }
+      })
+    }
   }
 }
 </script>
@@ -133,7 +160,7 @@ export default {
   top: 50%;
   left: 50%;
   padding: 30px 60px 20px;
-  width: 500px;
+  width: 550px;
   transform: translate(-50%, -50%);
   background: rgba(0, 0, 0, 0.3) !important;
   border-radius: 5px;

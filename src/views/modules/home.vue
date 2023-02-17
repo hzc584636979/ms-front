@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="home-main" v-if="!token">
+    <div class="home-main" v-if="!userId">
       <div class="home-area">
         <img class="msImg" src="~@/assets/img/login_i1.png" alt="">
         <div class="desc">
@@ -25,7 +25,11 @@ export default {
   },
   data () {
     return {
-      token: this.$cookie.get('token')
+    }
+  },
+  computed: {
+    userId () {
+      return this.$store.state.user.id
     }
   }
 }
@@ -55,8 +59,10 @@ export default {
         font-size: 30px;
       }
       .login-btn {
-        min-width: 120px;
+        min-width: 200px;
+        height: 50px;
         margin-top: 20px;
+        font-size: 18px;
       }
     }
   }

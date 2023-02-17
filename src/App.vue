@@ -9,8 +9,8 @@
           :label="item.name"
         ></el-option>
       </el-select>
-      <template v-if="token">
-        {{ $cookie.get('account') }}, <span class="pointer danger-color" @click="loginOut()">{{ $t('logout') }}</span>
+      <template v-if="userId">
+        {{ account }}, <span class="pointer danger-color" @click="loginOut()">{{ $t('logout') }}</span>
       </template>
     </div>
     <div class="site-content__wrapper">
@@ -27,7 +27,6 @@ export default {
   data () {
     return {
       resetViews: true,
-      token: this.$cookie.get('token'),
       language: this.$store.state.common.language,
       languageList: [
         { id: 'cn', name: '中文' },
@@ -55,6 +54,14 @@ export default {
     languageHandle (val) {
       this.$i18n.locale = val
       this.$store.commit('common/updateLanguage', val)
+    }
+  },
+  computed: {
+    userId () {
+      return this.$store.state.user.id
+    },
+    account () {
+      return this.$store.state.user.account
     }
   }
 }

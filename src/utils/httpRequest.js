@@ -1,5 +1,3 @@
-import Vue from 'vue'
-// import { Message } from 'element-ui'
 import axios from 'axios'
 import router from '@/router'
 import qs from 'qs'
@@ -18,7 +16,7 @@ const http = axios.create({
  * 请求拦截
  */
 http.interceptors.request.use(config => {
-  config.headers['token'] = Vue.cookie.get('token') // 请求头带上token
+  config.headers['token'] = sessionStorage.getItem('token') || localStorage.getItem('token') // 请求头带上token
   return config
 }, error => {
   return Promise.reject(error)

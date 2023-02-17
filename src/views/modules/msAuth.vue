@@ -28,22 +28,24 @@
         </el-input>
       </el-form-item>
       <el-form-item>
+        <div style="display: flex;justify-content: flex-end;">
+          <el-button
+            style="width: 309px;"
+            type="primary"
+            :loading="authLoading"
+            :disabled="isDisable"
+            @click="getCaptcha()"
+          >
+            {{ isDisable ? `${ captchaTime } s` : $t('msAuth.getCode') }}
+          </el-button>
+        </div>
+      </el-form-item>
+      <el-form-item>
         <el-input
-          class="captcha-wrap"
           v-model="captchaKey"
           readonly
         >
           <div class="input-pre-text input-pre-text-150" slot="prepend">{{ $t('msAuth.inkAuthorizationNumber') }}</div>
-          <div slot="append">
-            <el-button
-              :class="{ 'captcha-btn': !isDisable }"
-              :loading="authLoading"
-              :disabled="isDisable"
-              @click="getCaptcha()"
-            >
-              {{ isDisable ? `${ captchaTime } s` : $t('msAuth.getCode') }}
-            </el-button>
-          </div>
         </el-input>
       </el-form-item>
       <el-form-item class="tips-wrap">
@@ -136,9 +138,17 @@
 
 <script>
 // import { getMsCaptcha, vipRegister, getUserInfo } from '@/api/account'
+import { isEmpty } from '@/utils'
 import countryList from '@/utils/country'
 export default {
   data () {
+    let validateEmpty = (rule, value, callback) => {
+      if (isEmpty(value)) {
+        callback(new Error(this.$t('common.ruleLimitTips')))
+      } else {
+        callback()
+      }
+    }
     return {
       msAuthStep: 1,
       authLoading: false,
@@ -151,10 +161,10 @@ export default {
       captchaTime: 30,
       dataRule: {
         boardNo: [
-          { required: true, message: this.$t('common.ruleLimitTips'), trigger: 'blur' }
+          { validator: validateEmpty, trigger: 'blur' }
         ],
         inkNo: [
-          { required: true, message: this.$t('common.ruleLimitTips'), trigger: 'blur' }
+          { validator: validateEmpty, trigger: 'blur' }
         ]
       },
       vipLoading: false,
@@ -170,22 +180,22 @@ export default {
       },
       vipDataRule: {
         company: [
-          { required: true, message: this.$t('common.companyLimitTips'), trigger: 'blur', min: 8, max: 30 }
+          { validator: validateEmpty, trigger: 'blur', min: 8, max: 30 }
         ],
         name: [
-          { required: true, message: this.$t('common.userNameLimitTips'), trigger: 'blur', min: 4, max: 26 }
+          { validator: validateEmpty, trigger: 'blur', min: 4, max: 26 }
         ],
         phone: [
-          { required: true, message: this.$t('common.ruleLimitTips'), trigger: 'blur' }
+          { validator: validateEmpty, trigger: 'blur' }
         ],
         email: [
-          { required: true, message: this.$t('common.ruleLimitTips'), trigger: 'blur' }
+          { validator: validateEmpty, trigger: 'blur' }
         ],
         countryId: [
-          { required: true, message: this.$t('common.ruleLimitTips'), trigger: 'change' }
+          { validator: validateEmpty, trigger: 'change' }
         ],
         region: [
-          { required: true, message: this.$t('common.ruleLimitTips'), trigger: 'blur' }
+          { validator: validateEmpty, trigger: 'blur' }
         ]
       }
     }
@@ -304,6 +314,18 @@ export default {
         //   }
         // })
       }
+    },
+    '$store.state.common.language' () {
+      this.$refs['dataForm'].fields.forEach(item => {
+        if (item.validateState === 'error') {
+          this.$refs['dataForm'].validateField(item.labelFor)
+        }
+      })
+      this.$refs['vipDataForm'].fields.forEach(item => {
+        if (item.validateState === 'error') {
+          this.$refs['vipDataForm'].validateField(item.labelFor)
+        }
+      })
     }
   }
 }
@@ -356,16 +378,6 @@ export default {
       font-size: 26px;
       font-weight: 400;
       text-transform: uppercase;
-    }
-  }
-  .captcha-wrap {
-    .el-input-group__append {
-      border-right: 0;
-    }
-    .captcha-btn {
-      border: 0!important;
-      background-color: #3a8ee6!important;
-      color: #fff!important;
     }
   }
   .btn-wrap {

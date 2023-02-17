@@ -12,7 +12,8 @@ const lang = {
     accountLimitTips: 'Please enter 8-16 letters and numbers',
     passwordLimitTips: 'Please enter 8-16 letters and numbers',
     companyLimitTips: 'Please enter 8-30 characters',
-    userNameLimitTips: 'Please enter 4-26 characters'
+    userNameLimitTips: 'Please enter 4-26 characters',
+    emailLimitTips: 'Please enter your real email information'
   },
   home: {
     serveName: 'UVA3MAX Ink Activation System',
@@ -22,6 +23,7 @@ const lang = {
     rememb: 'Rememb me'
   },
   register: {
+    email: 'Email',
     confirmPassword: 'Age password',
     confirmPasswordLimitTips: 'Age passwords are not the same'
   },
@@ -39,7 +41,7 @@ const lang = {
     boardNumber: 'Board number',
     inkNumber: 'Ink number',
     inkAuthorizationNumber: 'Ink authorization number',
-    getCode: 'Get number',
+    getCode: 'Get authorization number',
     tips_1: 'Ink authorization is required after registering as a member',
     companyName: 'Company name',
     userName: 'Name',

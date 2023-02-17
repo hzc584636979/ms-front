@@ -1,8 +1,6 @@
 {
-  "name": "rsk-admin-ui",
-  "version": "1.4.0",
-  "author": "yangxinbao@rskjy.cn",
-  "private": true,
+  "name": "ms-front",
+  "version": "1.0.0",
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",

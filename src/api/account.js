@@ -13,5 +13,3 @@ export const vipRegister = (params) => httpPost('/vipRegister', params) // 会�
 export const getUserInfo = (params) => httpPost('/userInfo', params) // 获取用户信息
 
 export const getEmailCaptcha = (params) => httpGet('/msAuthCode', params) // 获取邮箱验证码
-
-export const adminLoginIn = (params) => httpPost('/login', params) // 后台登陆

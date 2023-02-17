@@ -1,13 +1,15 @@
-import Vue from 'vue'
 import store from '@/store'
 
 /**
  * 清除登录信息
  */
 export function clearLoginInfo () {
-  Vue.cookie.delete('token')
-  Vue.cookie.delete('userId')
-  Vue.cookie.delete('account')
+  localStorage.removeItem('token')
+  localStorage.removeItem('userId')
+  localStorage.removeItem('account')
+  sessionStorage.removeItem('token')
+  sessionStorage.removeItem('userId')
+  sessionStorage.removeItem('account')
   store.commit('resetStore')
 }
 

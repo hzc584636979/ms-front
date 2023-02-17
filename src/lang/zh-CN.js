@@ -12,7 +12,8 @@ const lang = {
     accountLimitTips: '请输入8-16位字母和数字',
     passwordLimitTips: '请输入8-16位字母和数字',
     companyLimitTips: '请输入8-30位字符',
-    userNameLimitTips: '请输入4-26位字符'
+    userNameLimitTips: '请输入4-26位字符',
+    emailLimitTips: '请输入您的真实邮箱信息'
   },
   home: {
     serveName: 'UVA3MAX墨水激活系统',
@@ -22,6 +23,7 @@ const lang = {
     rememb: '记住我'
   },
   register: {
+    email: '邮箱',
     confirmPassword: '确认密码',
     confirmPasswordLimitTips: '二次密码不一致'
   },
@@ -34,7 +36,7 @@ const lang = {
     emailCodeLimitTips: '邮箱验证码错误'
   },
   msAuth: {
-    inkAuthorization: 'Ink authorization',
+    inkAuthorization: '墨水授权',
     registerVip: '注册会员',
     boardNumber: '主板编号',
     inkNumber: '墨水编号',

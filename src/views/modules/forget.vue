@@ -76,6 +76,7 @@
 
 <script>
 // import { getEmailCaptcha, forget } from '@/api/account'
+import { isEmpty } from '@/utils'
 import { isUserName, isPassWord } from '@/utils/validate'
 export default {
   data () {
@@ -101,7 +102,9 @@ export default {
       }
     }
     let validateEmailCaptcha = (rule, value, callback) => {
-      if (value !== this.captchaKey) {
+      if (isEmpty(value)) {
+        callback(new Error(this.$t('common.ruleLimitTips')))
+      } else if (value !== this.captchaKey) {
         callback(new Error(this.$t('forget.emailCodeLimitTips')))
       } else {
         callback()
@@ -121,20 +124,16 @@ export default {
       captchaTime: 30,
       dataRule: {
         account: [
-          { required: true, message: this.$t('common.ruleLimitTips'), trigger: 'blur' },
           { validator: validateAccount, trigger: 'blur', min: 8, max: 20 }
         ],
         password: [
-          { required: true, message: this.$t('common.ruleLimitTips'), trigger: 'blur' },
           { validator: validatePassword, trigger: 'blur', min: 8, max: 20 }
         ],
         agePassword: [
-          { required: true, message: this.$t('common.ruleLimitTips'), trigger: 'blur' },
           { validator: validateAgePassword, trigger: 'blur', min: 8, max: 20 }
         ],
         captchaKey: [
-          { required: true, message: this.$t('common.ruleLimitTips'), trigger: 'blur' },
-          { validator: validateEmailCaptcha }
+          { validator: validateEmailCaptcha, trigger: 'blur' }
         ]
       }
     }
@@ -196,6 +195,15 @@ export default {
         }
       })
     }
+  },
+  watch: {
+    '$store.state.common.language' () {
+      this.$refs['dataForm'].fields.forEach(item => {
+        if (item.validateState === 'error') {
+          this.$refs['dataForm'].validateField(item.labelFor)
+        }
+      })
+    }
   }
 }
 </script>
@@ -237,6 +245,7 @@ export default {
       border-right: 0;
     }
     .captcha-btn {
+      height: 40px;
       border: 0!important;
       background-color: #3a8ee6!important;
       color: #fff!important;

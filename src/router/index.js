@@ -45,7 +45,8 @@ const routes = [
     component: _import('modules/forget'),
     name: 'forget',
     meta: { title: '找回密码' }
-  }
+  },
+  { path: '*', redirect: { name: '404' } }
 ]
 
 // 配置公共路由
