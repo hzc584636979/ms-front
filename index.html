@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>墨水激活系统 Ink Activation System</title>
+  <% if (process.env.NODE_ENV === 'production') { %>
+  <script>
+    var script = document.createElement('script')
+    script.src = './config/index.js?t=' + new Date().getTime()
+    document.write(script.outerHTML)
+  </script>
+  <% }else { %>
+  <!-- 开发环境 -->
+  <link rel="shortcut icon" type="image/x-icon" href="./static/img/favicon.png">
+  <script src="./static/config/index.js"></script>
+  <link rel="stylesheet" href="./static/css/loading.css" id="loadCss">
+  <% } %>
+</head>
+
+<body>
+  <div class="loading" id="loadingMark">
+    <p>
+      <i></i>
+      <i></i>
+      <i></i>
+      <i></i>
+      <i></i>
+    </p>
+    <p class="loading-text">加载资源中，请稍后</p>
+  </div>
+  <div id="app"></div>
+</body>
+
+</html>

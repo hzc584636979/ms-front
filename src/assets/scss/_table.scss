@@ -1,0 +1,46 @@
+// table td内容超过3行显示...
+.el-table{
+  & td{
+    & .text-to-long-cut{
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      /*! autoprefixer: off */
+      -webkit-box-orient: vertical
+      /* autoprefixer: on */
+    }
+  }
+}
+
+// 启用、禁用按钮
+.switchStyle{
+  .el-switch__label {
+      position: absolute;
+      display: none;
+      font-weight:normal;
+  }
+  .el-switch__label *{
+      font-size:12px;
+  }
+  .el-switch__label--left {
+      z-index: 9;
+      left:8px;
+      top: -1px;
+      color: #fff;
+  }
+  .el-switch__label--right {
+      z-index: 9;
+      left: -17px;
+      top: -1px;
+      color: #fff;
+  }
+  .el-switch__label.is-active {
+      display: block;
+      height:20px;
+      line-height:20px;
+  }
+}
+.switchStyle.el-switch .el-switch__core,.el-switch .el-switch__label {
+    width:40px !important;
+}

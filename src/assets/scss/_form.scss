@@ -1,0 +1,61 @@
+// 右侧画布 下方放置 Copyright
+.el-card__body {
+  padding-bottom: 40px;
+}
+
+.el-form {
+  //textarea 计数
+  & /deep/ .el-input__count {
+    line-height: 12px;
+  }
+}
+
+// 图片查看 关闭按钮
+.el-image-viewer__wrapper {
+  .el-icon-circle-close {
+    color: white;
+  }
+}
+.el-image-viewer__wrapper {
+  .el-image-viewer__close {
+    .el-icon-close {
+      color: white;
+    }
+  }
+}
+
+// input单位
+.input-unit {
+  padding-right: 5px;
+  color: #606266;
+  font-style: normal;
+}
+
+// 标签选择区域
+.tag-checked {
+  &-count {
+    margin: 0 0 5px 0;
+    color: #606266;
+    &-btn {
+      margin-left: 5px;
+    }
+  }
+  &-list {
+    min-height: 80px;
+    .el-card__body {
+      padding: 10px;
+    }
+    span {
+      padding: 0 5px;
+    }
+    .checked-delete {
+      padding-left: 5px;
+      color: #f56c6c;
+      transition: all .5s ease-out;
+      &:hover {
+        cursor: pointer;
+        transform: scale(1.3);
+      }
+    }
+  }
+}
