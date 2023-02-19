@@ -10,18 +10,18 @@
       @keyup.enter.native="dataFormSubmit()"
       status-icon
     >
-      <el-form-item prop="account">
+      <el-form-item prop="username">
         <el-input
-          v-model.trim="dataForm.account"
+          v-model.trim="dataForm.username"
           clearable
           :placeholder="$t('common.accountLimitTips')"
         >
           <div class="input-pre-text" slot="prepend">{{ $t('common.account') }}</div>
         </el-input>
       </el-form-item>
-      <el-form-item prop="password">
+      <el-form-item prop="pwd">
         <el-input
-          v-model.trim="dataForm.password"
+          v-model.trim="dataForm.pwd"
           type="password"
           clearable
           show-password
@@ -56,7 +56,7 @@
 </template>
 
 <script>
-// import { loginIn } from '@/api/account'
+import { loginIn } from '@/api/account'
 import { isUserName, isPassWord } from '@/utils/validate'
 export default {
   data () {
@@ -77,15 +77,15 @@ export default {
     return {
       loading: false,
       dataForm: {
-        account: '',
-        password: ''
+        username: '',
+        pwd: ''
       },
       isRememb: false,
       dataRule: {
-        account: [
+        username: [
           { validator: validateAccount, trigger: 'blur', min: 8, max: 20 }
         ],
-        password: [
+        pwd: [
           { validator: validatePassword, trigger: 'blur', min: 8, max: 20 }
         ]
       }
@@ -96,39 +96,25 @@ export default {
     dataFormSubmit () {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          if (this.isRememb) {
-            localStorage.setItem('token', 'token')
-            localStorage.setItem('userId', 'userId')
-            localStorage.setItem('account', this.dataForm.account)
-          } else {
-            sessionStorage.setItem('token', 'token')
-            sessionStorage.setItem('userId', 'userId')
-            sessionStorage.setItem('account', this.dataForm.account)
-          }
-          this.$store.commit('user/updateId', 'userId')
-          this.$store.commit('user/updateAccount', this.dataForm.account)
-          this.$router.replace({ name: 'home' })
-          // const params = { ...this.dataForm }
-          // this.loading = true
-          // loginIn(params).then(({ data }) => {
-          //   this.loading = false
-          //   if (data && data.success === true) {
-          //     if (this.isRememb) {
-          //       localStorage.setItem('token', 'token')
-          //       localStorage.setItem('userId', 'userId')
-          //       localStorage.setItem('account', this.dataForm.account)
-          //     } else {
-          //       sessionStorage.setItem('token', 'token')
-          //       sessionStorage.setItem('userId', 'userId')
-          //       sessionStorage.setItem('account', this.dataForm.account)
-          //     }
-          //     this.$store.commit('user/updateId', 'userId')
-          //     this.$store.commit('user/updateAccount', this.dataForm.account)
-          //     this.$router.replace({ name: 'home' })
-          //   } else {
-          //     this.$message.error(data.message)
-          //   }
-          // })
+          const params = { ...this.dataForm }
+          this.loading = true
+          loginIn(params).then(({ data }) => {
+            this.loading = false
+            if (data.code == 9) {
+              if (this.isRememb) {
+                localStorage.setItem('token', data.data.token)
+                localStorage.setItem('account', this.dataForm.username)
+              } else {
+                sessionStorage.setItem('token', data.data.token)
+                sessionStorage.setItem('account', this.dataForm.username)
+              }
+              this.$store.commit('user/updateToken', data.data.token)
+              this.$store.commit('user/updateAccount', this.dataForm.username)
+              this.$router.replace({ name: 'home' })
+            } else {
+              this.$message.error(this.$t(`serverErrorMsg.${data.code}`))
+            }
+          })
         }
       })
     }

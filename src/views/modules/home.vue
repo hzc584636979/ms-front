@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="home-main" v-if="!userId">
+    <div class="home-main" v-if="!token">
       <div class="home-area">
         <img class="msImg" src="~@/assets/img/login_i1.png" alt="">
         <div class="desc">
@@ -28,8 +28,8 @@ export default {
     }
   },
   computed: {
-    userId () {
-      return this.$store.state.user.id
+    token () {
+      return this.$store.state.user.token
     }
   }
 }

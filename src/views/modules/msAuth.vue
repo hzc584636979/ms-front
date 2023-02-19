@@ -10,17 +10,17 @@
       ref="dataForm"
       status-icon
     >
-      <el-form-item prop="boardNo">
+      <el-form-item prop="mainBoardId">
         <el-input
-          v-model.trim="dataForm.boardNo"
+          v-model.trim="dataForm.mainBoardId"
           clearable
         >
           <div class="input-pre-text input-pre-text-150" slot="prepend">{{ $t('msAuth.boardNumber') }}</div>
         </el-input>
       </el-form-item>
-      <el-form-item prop="inkNo">
+      <el-form-item prop="inkId">
         <el-input
-          v-model.trim="dataForm.inkNo"
+          v-model.trim="dataForm.inkId"
           type="password"
           clearable
         >
@@ -63,18 +63,18 @@
       @keyup.enter.native="vipDataFormSubmit()"
       status-icon
     >
-      <el-form-item prop="company">
+      <el-form-item prop="corporateName">
         <el-input
-          v-model.trim="vipDataForm.company"
+          v-model.trim="vipDataForm.corporateName"
           clearable
           :placeholder="$t('common.companyLimitTips')"
         >
           <div class="input-pre-text" slot="prepend">{{ $t('msAuth.companyName') }}</div>
         </el-input>
       </el-form-item>
-      <el-form-item prop="name">
+      <el-form-item prop="realName">
         <el-input
-          v-model.trim="vipDataForm.name"
+          v-model.trim="vipDataForm.realName"
           clearable
           :placeholder="$t('common.userNameLimitTips')"
         >
@@ -105,7 +105,7 @@
               v-for="item in countryList"
               :key="item.id"
               :value="item.id"
-              :label="item.Chinese"
+              :label="$store.state.common.language === 'cn' ? item.Chinese : item.English"
             ></el-option>
           </el-select>
         </div>
@@ -137,8 +137,9 @@
 </template>
 
 <script>
-// import { getMsCaptcha, vipRegister, getUserInfo } from '@/api/account'
+import { getMsCaptcha, vipRegister, getUserInfo } from '@/api/account'
 import { isEmpty } from '@/utils'
+import { isEmail } from '@/utils/validate'
 import countryList from '@/utils/country'
 export default {
   data () {
@@ -149,29 +150,37 @@ export default {
         callback()
       }
     }
+    let validateEmail = (rule, value, callback) => {
+      if (!isEmail(value)) {
+        callback(new Error(this.$t('common.emailLimitTips')))
+      } else {
+        callback()
+      }
+    }
     return {
       msAuthStep: 1,
       authLoading: false,
+      userInfo: {},
       dataForm: {
-        boardNo: '',
-        inkNo: ''
+        mainBoardId: '',
+        inkId: ''
       },
       isDisable: false,
       captchaKey: '',
       captchaTime: 30,
       dataRule: {
-        boardNo: [
+        mainBoardId: [
           { validator: validateEmpty, trigger: 'blur' }
         ],
-        inkNo: [
+        inkId: [
           { validator: validateEmpty, trigger: 'blur' }
         ]
       },
       vipLoading: false,
       countryList: countryList,
       vipDataForm: {
-        company: '',
-        name: '',
+        corporateName: '',
+        realName: '',
         phone: '',
         email: '',
         countryId: '',
@@ -179,17 +188,17 @@ export default {
         region: ''
       },
       vipDataRule: {
-        company: [
+        corporateName: [
           { validator: validateEmpty, trigger: 'blur', min: 8, max: 30 }
         ],
-        name: [
+        realName: [
           { validator: validateEmpty, trigger: 'blur', min: 4, max: 26 }
         ],
         phone: [
           { validator: validateEmpty, trigger: 'blur' }
         ],
         email: [
-          { validator: validateEmpty, trigger: 'blur' }
+          { validator: validateEmail, trigger: 'blur' }
         ],
         countryId: [
           { validator: validateEmpty, trigger: 'change' }
@@ -200,42 +209,61 @@ export default {
       }
     }
   },
+  mounted () {
+    this.getUserInfoHandle()
+  },
   methods: {
+    getUserInfoHandle () {
+      const loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+      getUserInfo().then(({ data }) => {
+        loading.close()
+        if (data.code == 200) {
+          const userInfo = {
+            corporateName: data.data.corporateName,
+            realName: data.data.realName,
+            phone: data.data.phone,
+            email: data.data.email,
+            countryId: data.data.countryId,
+            countryName: data.data.countryName,
+            region: data.data.region
+          }
+          this.vipDataForm = { ...userInfo }
+          this.userInfo = { ...userInfo }
+        } else {
+          this.$message.error(this.$t(`serverErrorMsg.${data.code}`))
+        }
+      })
+    },
     // 获取授权码
     getCaptcha () {
       if (this.isDisable) return
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.isDisable = true
-          this.captchaKey = 'asdsadadsadsad'
-          this.captchaTime = 30
-          let timeFlag = setInterval(() => {
-            this.captchaTime--
-            if (this.captchaTime === 0) {
+          this.authLoading = true
+          const params = { ...this.dataForm }
+          getMsCaptcha(params).then(({ data }) => {
+            this.authLoading = false
+            if (data.code == 39) {
+              this.isDisable = true
+              this.captchaKey = data.data.authorizedCode
               this.captchaTime = 30
-              this.isDisable = false
-              window.clearInterval(timeFlag)
+              let timeFlag = setInterval(() => {
+                this.captchaTime--
+                if (this.captchaTime === 0) {
+                  this.captchaTime = 30
+                  this.isDisable = false
+                  window.clearInterval(timeFlag)
+                }
+              }, 1000)
+            } else {
+              this.$message.error(this.$t(`serverErrorMsg.${data.code}`))
             }
-          }, 1000)
-          // this.authLoading = true
-          // getMsCaptcha().then(({ data }) => {
-          //   this.authLoading = false
-          //   if (data && data.success === true) {
-          //     this.isDisable = true
-          //     this.captchaKey = data.data.key
-          //     this.captchaTime = 30
-          //     let timeFlag = setInterval(() => {
-          //       this.captchaTime--
-          //       if (this.captchaTime === 0) {
-          //         this.captchaTime = 30
-          //         this.isDisable = false
-          //         window.clearInterval(timeFlag)
-          //       }
-          //     }, 1000)
-          //   } else {
-          //     this.$message.error(data.message)
-          //   }
-          // })
+          })
         }
       })
     },
@@ -252,17 +280,17 @@ export default {
     vipDataFormSubmit () {
       this.$refs['vipDataForm'].validate((valid) => {
         if (valid) {
-          this.msAuthStep = 1
-          // const params = { ...this.dataForm }
-          // this.vipLoading = true
-          // vipRegister(params).then(({ data }) => {
-          //   this.vipLoading = false
-          //   if (data && data.success === true) {
-          //     this.msAuthStep = 1
-          //   } else {
-          //     this.$message.error(data.message)
-          //   }
-          // })
+          const params = { ...this.vipDataForm }
+          this.vipLoading = true
+          vipRegister(params).then(({ data }) => {
+            this.vipLoading = false
+            if (data.code == 14) {
+              this.userInfo = { ...this.vipDataForm }
+              this.msAuthStep = 1
+            } else {
+              this.$message.error(data.message)
+            }
+          })
         }
       })
     }
@@ -273,8 +301,8 @@ export default {
       this.$refs['vipDataForm'].clearValidate()
       if (val == 1) {
         this.vipDataForm = {
-          company: '',
-          name: '',
+          corporateName: '',
+          realName: '',
           phone: '',
           email: '',
           countryId: '',
@@ -282,37 +310,7 @@ export default {
           region: ''
         }
       } else {
-        this.vipDataForm = {
-          company: 12321313,
-          name: 123213,
-          phone: 123213,
-          email: 123213,
-          countryId: 12323,
-          countryName: 123213,
-          region: 1232131
-        }
-        // const loading = this.$loading({
-        //   lock: true,
-        //   text: 'Loading',
-        //   spinner: 'el-icon-loading',
-        //   background: 'rgba(0, 0, 0, 0.7)'
-        // })
-        // getUserInfo().then(({ data }) => {
-        //   loading.close()
-        //   if (data && data.success === true) {
-        //     this.vipDataForm = {
-        //       company: data.data.company,
-        //       name: data.data.name,
-        //       phone: data.data.phone,
-        //       email: data.data.email,
-        //       countryId: data.data.countryId,
-        //       countryName: data.data.countryName,
-        //       region: data.data.region
-        //     }
-        //   } else {
-        //     this.$message.error(data.message)
-        //   }
-        // })
+        this.vipDataForm = { ...this.userInfo }
       }
     },
     '$store.state.common.language' () {

@@ -9,8 +9,8 @@
           :label="item.name"
         ></el-option>
       </el-select>
-      <template v-if="userId">
-        {{ account }}, <span class="pointer danger-color" @click="loginOut()">{{ $t('logout') }}</span>
+      <template v-if="token">
+        {{ account }}, <span class="pointer danger-color" @click="loginOut()">{{ $t('common.logout') }}</span>
       </template>
     </div>
     <div class="site-content__wrapper">
@@ -57,8 +57,8 @@ export default {
     }
   },
   computed: {
-    userId () {
-      return this.$store.state.user.id
+    token () {
+      return this.$store.state.user.token
     },
     account () {
       return this.$store.state.user.account

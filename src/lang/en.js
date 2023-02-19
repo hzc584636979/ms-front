@@ -1,4 +1,17 @@
 const lang = {
+  serverErrorMsg: {
+    6: 'This account already exists',
+    7: 'Account or password error',
+    12: 'Email verification code error',
+    13: 'The email does not exist',
+    31: 'Please register a VIP before using ink authorization',
+    33: 'The main board code format is incorrect',
+    34: 'Failed to parse ink code',
+    35: 'The motherboard code is incorrect',
+    36: 'Wrong ink type',
+    37: 'Authorization exception, please contact the administrator!',
+    38: 'Existing authorization code'
+  },
   common: {
     account: 'Account',
     password: 'Password',

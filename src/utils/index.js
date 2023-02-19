@@ -5,10 +5,8 @@ import store from '@/store'
  */
 export function clearLoginInfo () {
   localStorage.removeItem('token')
-  localStorage.removeItem('userId')
   localStorage.removeItem('account')
   sessionStorage.removeItem('token')
-  sessionStorage.removeItem('userId')
   sessionStorage.removeItem('account')
   store.commit('resetStore')
 }

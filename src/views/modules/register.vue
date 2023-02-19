@@ -10,18 +10,18 @@
       @keyup.enter.native="dataFormSubmit()"
       status-icon
     >
-      <el-form-item prop="account">
+      <el-form-item prop="username">
         <el-input
-          v-model.trim="dataForm.account"
+          v-model.trim="dataForm.username"
           clearable
           :placeholder="$t('common.accountLimitTips')"
         >
           <div class="input-pre-text" slot="prepend">{{ $t('common.account') }}</div>
         </el-input>
       </el-form-item>
-      <el-form-item prop="password">
+      <el-form-item prop="pwd">
         <el-input
-          v-model.trim="dataForm.password"
+          v-model.trim="dataForm.pwd"
           type="password"
           clearable
           show-password
@@ -66,8 +66,7 @@
 
 <script>
 import { register } from '@/api/account'
-import { isEmpty } from '@/utils'
-import { isUserName, isPassWord } from '@/utils/validate'
+import { isUserName, isPassWord, isEmail } from '@/utils/validate'
 export default {
   data () {
     let validateAccount = (rule, value, callback) => {
@@ -85,15 +84,15 @@ export default {
       }
     }
     let validateAgePassword = (rule, value, callback) => {
-      if (value !== this.dataForm.password) {
+      if (value !== this.dataForm.pwd) {
         callback(new Error(this.$t('register.confirmPasswordLimitTips')))
       } else {
         callback()
       }
     }
-    let validateEmpty = (rule, value, callback) => {
-      if (isEmpty(value)) {
-        callback(new Error(this.$t('common.ruleLimitTips')))
+    let validateEmail = (rule, value, callback) => {
+      if (!isEmail(value)) {
+        callback(new Error(this.$t('common.emailLimitTips')))
       } else {
         callback()
       }
@@ -101,23 +100,23 @@ export default {
     return {
       loading: false,
       dataForm: {
-        account: '',
-        password: '',
+        username: '',
+        pwd: '',
         agePassword: '',
         email: ''
       },
       dataRule: {
-        account: [
+        username: [
           { validator: validateAccount, trigger: 'blur', min: 8, max: 20 }
         ],
-        password: [
+        pwd: [
           { validator: validatePassword, trigger: 'blur', min: 8, max: 20 }
         ],
         agePassword: [
           { validator: validateAgePassword, trigger: 'blur', min: 8, max: 20 }
         ],
         email: [
-          { validator: validateEmpty, trigger: 'blur' }
+          { validator: validateEmail, trigger: 'blur' }
         ]
       }
     }
@@ -131,11 +130,10 @@ export default {
           this.loading = true
           register(params).then(({ data }) => {
             this.loading = false
-            if (data && data.success === true) {
+            if (data.code == 8) {
               this.$router.replace({ name: 'login' })
             } else {
-              this.loading = false
-              this.$message.error(data.message)
+              this.$message.error(this.$t(`serverErrorMsg.${data.code}`))
             }
           })
         }

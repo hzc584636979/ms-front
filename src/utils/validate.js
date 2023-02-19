@@ -11,7 +11,7 @@ export function isEmail (s) {
  * @param {*} s
  */
 export function isUserName (s) {
-  return /^[a-zA-Z0-9_]{8,16}$/.test(s)
+  return /^(?=.*[0-9+$])(?=.*[a-zA-Z+$])[0-9A-Za-z]{8,16}$/.test(s)
 }
 
 /**
@@ -19,7 +19,7 @@ export function isUserName (s) {
  * @param {*} s
  */
 export function isPassWord (s) {
-  return /^[a-zA-Z0-9_]{8,16}$/.test(s)
+  return /^(?=.*[0-9+$])(?=.*[a-zA-Z+$])[0-9A-Za-z]{8,16}$/.test(s)
 }
 
 /**

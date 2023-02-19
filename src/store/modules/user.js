@@ -1,12 +1,12 @@
 export default {
   namespaced: true,
   state: {
-    id: sessionStorage.getItem('userId') || localStorage.getItem('userId') || '',
+    token: sessionStorage.getItem('token') || localStorage.getItem('token') || '',
     account: sessionStorage.getItem('account') || localStorage.getItem('account') || ''
   },
   mutations: {
-    updateId (state, id) {
-      state.id = id
+    updateToken (state, token) {
+      state.token = token
     },
     updateAccount (state, account) {
       state.account = account

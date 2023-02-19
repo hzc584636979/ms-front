@@ -10,18 +10,18 @@
       @keyup.enter.native="dataFormSubmit()"
       status-icon
     >
-      <el-form-item prop="account">
+      <el-form-item prop="username">
         <el-input
-          v-model.trim="dataForm.account"
+          v-model.trim="dataForm.username"
           clearable
           :placeholder="$t('common.accountLimitTips')"
         >
           <div class="input-pre-text" slot="prepend">{{ $t('common.account') }}</div>
         </el-input>
       </el-form-item>
-      <el-form-item prop="password">
+      <el-form-item prop="pwd">
         <el-input
-          v-model.trim="dataForm.password"
+          v-model.trim="dataForm.pwd"
           type="password"
           clearable
           show-password
@@ -41,11 +41,10 @@
           <div class="input-pre-text" slot="prepend">{{ $t('forget.confirmPassword') }}</div>
         </el-input>
       </el-form-item>
-      <el-form-item prop="captchaKey">
+      <el-form-item prop="emailCode">
         <el-input
           class="captcha-wrap"
-          v-model="dataForm.captchaKey"
-          readonly
+          v-model="dataForm.emailCode"
         >
           <div class="input-pre-text" slot="prepend">{{ $t('forget.emailCode') }}</div>
           <div slot="append">
@@ -75,7 +74,7 @@
 </template>
 
 <script>
-// import { getEmailCaptcha, forget } from '@/api/account'
+import { getEmailCaptcha, forget } from '@/api/account'
 import { isEmpty } from '@/utils'
 import { isUserName, isPassWord } from '@/utils/validate'
 export default {
@@ -95,7 +94,7 @@ export default {
       }
     }
     let validateAgePassword = (rule, value, callback) => {
-      if (value !== this.dataForm.password) {
+      if (value !== this.dataForm.pwd) {
         callback(new Error(this.$t('forget.confirmPasswordLimitTips')))
       } else {
         callback()
@@ -104,8 +103,6 @@ export default {
     let validateEmailCaptcha = (rule, value, callback) => {
       if (isEmpty(value)) {
         callback(new Error(this.$t('common.ruleLimitTips')))
-      } else if (value !== this.captchaKey) {
-        callback(new Error(this.$t('forget.emailCodeLimitTips')))
       } else {
         callback()
       }
@@ -114,66 +111,56 @@ export default {
       loading: false,
       authLoading: false,
       dataForm: {
-        account: '',
-        password: '',
+        username: '',
+        pwd: '',
         agePassword: '',
-        captchaKey: ''
+        emailCode: ''
       },
       isDisable: false,
-      captchaKey: '',
       captchaTime: 30,
       dataRule: {
-        account: [
+        username: [
           { validator: validateAccount, trigger: 'blur', min: 8, max: 20 }
         ],
-        password: [
+        pwd: [
           { validator: validatePassword, trigger: 'blur', min: 8, max: 20 }
         ],
         agePassword: [
           { validator: validateAgePassword, trigger: 'blur', min: 8, max: 20 }
         ],
-        captchaKey: [
+        emailCode: [
           { validator: validateEmailCaptcha, trigger: 'blur' }
         ]
       }
     }
   },
   methods: {
-    // 获取授权码
+    // 获取验证码
     getCaptcha () {
       if (this.isDisable) return
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          this.isDisable = true
-          this.captchaTime = 30
-          this.captchaKey = 'asdsadadsadsad'
-          let timeFlag = setInterval(() => {
-            this.captchaTime--
-            if (this.captchaTime === 0) {
+      this.$refs['dataForm'].validateField('username', (errorMessage) => {
+        if (!errorMessage) {
+          this.authLoading = true
+          const params = {
+            username: this.dataForm.username
+          }
+          getEmailCaptcha(params).then(({ data }) => {
+            this.authLoading = false
+            if (data.code == 11) {
+              this.isDisable = true
               this.captchaTime = 30
-              this.isDisable = false
-              window.clearInterval(timeFlag)
+              let timeFlag = setInterval(() => {
+                this.captchaTime--
+                if (this.captchaTime === 0) {
+                  this.captchaTime = 30
+                  this.isDisable = false
+                  window.clearInterval(timeFlag)
+                }
+              }, 1000)
+            } else {
+              this.$message.error(this.$t(`serverErrorMsg.${data.code}`))
             }
-          }, 1000)
-          // this.authLoading = true
-          // getEmailCaptcha().then(({ data }) => {
-          //   this.authLoading = false
-          //   if (data && data.success === true) {
-          //     this.isDisable = true
-          //     this.captchaKey = data.data.key
-          //     this.captchaTime = 30
-          //     let timeFlag = setInterval(() => {
-          //       this.captchaTime--
-          //       if (this.captchaTime === 0) {
-          //         this.captchaTime = 30
-          //         this.isDisable = false
-          //         window.clearInterval(timeFlag)
-          //       }
-          //     }, 1000)
-          //   } else {
-          //     this.$message.error(data.message)
-          //   }
-          // })
+          })
         }
       })
     },
@@ -181,17 +168,17 @@ export default {
     dataFormSubmit () {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.$router.replace({ name: 'login' })
-          // const params = { ...this.dataForm }
-          // this.loading = true
-          // forget(params).then(({ data }) => {
-          //   this.loading = false
-          //   if (data && data.success === true) {
-          //     this.$router.replace({ name: 'login' })
-          //   } else {
-          //     this.$message.error(data.message)
-          //   }
-          // })
+          // this.$router.replace({ name: 'login' })
+          const params = { ...this.dataForm }
+          this.loading = true
+          forget(params).then(({ data }) => {
+            this.loading = false
+            if (data.code == 10) {
+              this.$router.replace({ name: 'login' })
+            } else {
+              this.$message.error(this.$t(`serverErrorMsg.${data.code}`))
+            }
+          })
         }
       })
     }
