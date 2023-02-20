@@ -1,5 +1,5 @@
 <template>
-  <div class="msAuth-main" :class="{'msAuth-main-2': msAuthStep === 2}">
+  <div class="msAuth-main">
     <div class="title-all">
       <h3 class="title">{{ msAuthStep === 1 ? $t('msAuth.inkAuthorization') : $t('msAuth.registerVip') }}</h3>
     </div>
@@ -29,7 +29,7 @@
       <el-form-item>
         <div style="display: flex;justify-content: flex-end;">
           <el-button
-            style="width: 309px;"
+            style="width: 409px;"
             type="primary"
             :loading="authLoading"
             :disabled="isDisable"
@@ -149,6 +149,24 @@ export default {
         callback()
       }
     }
+    let validateCorporateName = (rule, value, callback) => {
+      if (isEmpty(value)) {
+        callback(new Error(this.$t('common.ruleLimitTips')))
+      } else if (!/^.{4,}$/.test(value)) {
+        callback(new Error(this.$t('common.companyLimitTips')))
+      } else {
+        callback()
+      }
+    }
+    let validateRealName = (rule, value, callback) => {
+      if (isEmpty(value)) {
+        callback(new Error(this.$t('common.ruleLimitTips')))
+      } else if (!/^.{2,}$/.test(value)) {
+        callback(new Error(this.$t('common.userNameLimitTips')))
+      } else {
+        callback()
+      }
+    }
     let validateEmail = (rule, value, callback) => {
       if (!isEmail(value)) {
         callback(new Error(this.$t('common.emailLimitTips')))
@@ -188,10 +206,10 @@ export default {
       },
       vipDataRule: {
         corporateName: [
-          { validator: validateEmpty, trigger: 'blur', min: 8, max: 30 }
+          { validator: validateCorporateName, trigger: 'blur' }
         ],
         realName: [
-          { validator: validateEmpty, trigger: 'blur', min: 4, max: 26 }
+          { validator: validateRealName, trigger: 'blur' }
         ],
         phone: [
           { validator: validateEmpty, trigger: 'blur' }
@@ -247,7 +265,7 @@ export default {
           const params = { ...this.dataForm }
           getMsCaptcha(params).then(({ data }) => {
             this.authLoading = false
-            if (data.code == 39) {
+            if (data.code == 38 || data.code == 39) {
               this.$message.success(this.$t('common.successMsg'))
               this.isDisable = true
               this.captchaKey = data.data.authorizedCode
@@ -343,9 +361,6 @@ export default {
   transform: translate(-50%, -50%);
   background: rgba(0, 0, 0, 0.3) !important;
   border-radius: 5px;
-  &-2 {
-    width: 600px;
-  }
   input::-webkit-input-placeholder{
     color:#909399;
   }

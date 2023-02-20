@@ -83,10 +83,10 @@ export default {
       isRememb: false,
       dataRule: {
         username: [
-          { validator: validateAccount, trigger: 'blur', min: 8, max: 20 }
+          { validator: validateAccount, trigger: 'blur' }
         ],
         pwd: [
-          { validator: validatePassword, trigger: 'blur', min: 8, max: 20 }
+          { validator: validatePassword, trigger: 'blur' }
         ]
       }
     }

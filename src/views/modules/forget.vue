@@ -120,13 +120,13 @@ export default {
       captchaTime: 30,
       dataRule: {
         username: [
-          { validator: validateAccount, trigger: 'blur', min: 8, max: 20 }
+          { validator: validateAccount, trigger: 'blur' }
         ],
         pwd: [
-          { validator: validatePassword, trigger: 'blur', min: 8, max: 20 }
+          { validator: validatePassword, trigger: 'blur' }
         ],
         agePassword: [
-          { validator: validateAgePassword, trigger: 'blur', min: 8, max: 20 }
+          { validator: validateAgePassword, trigger: 'blur' }
         ],
         emailCode: [
           { validator: validateEmailCaptcha, trigger: 'blur' }
