@@ -101,6 +101,7 @@ export default {
           loginIn(params).then(({ data }) => {
             this.loading = false
             if (data.code == 9) {
+              this.$message.success(this.$t('common.successMsg'))
               if (this.isRememb) {
                 localStorage.setItem('token', data.data.token)
                 localStorage.setItem('account', this.dataForm.username)

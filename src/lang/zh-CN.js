@@ -26,7 +26,8 @@ const lang = {
     passwordLimitTips: '请输入8-16位字母和数字',
     companyLimitTips: '请输入8-30位字符',
     userNameLimitTips: '请输入4-26位字符',
-    emailLimitTips: '请输入您的真实邮箱信息'
+    emailLimitTips: '请输入您的真实邮箱信息',
+    successMsg: '操作成功'
   },
   home: {
     serveName: 'UVA3MAX墨水激活系统',

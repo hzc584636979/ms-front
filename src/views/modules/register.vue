@@ -131,6 +131,7 @@ export default {
           register(params).then(({ data }) => {
             this.loading = false
             if (data.code == 8) {
+              this.$message.success(this.$t('common.success'))
               this.$router.replace({ name: 'login' })
             } else {
               this.$message.error(this.$t(`serverErrorMsg.${data.code}`))

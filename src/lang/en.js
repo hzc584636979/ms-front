@@ -26,7 +26,8 @@ const lang = {
     passwordLimitTips: 'Please enter 8-16 letters and numbers',
     companyLimitTips: 'Please enter 8-30 characters',
     userNameLimitTips: 'Please enter 4-26 characters',
-    emailLimitTips: 'Please enter your real email information'
+    emailLimitTips: 'Please enter your real email information',
+    successMsg: 'success'
   },
   home: {
     serveName: 'UVA3MAX Ink Activation System',

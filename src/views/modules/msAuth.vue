@@ -1,5 +1,5 @@
 <template>
-  <div class="msAuth-main">
+  <div class="msAuth-main" :class="{'msAuth-main-2': msAuthStep === 2}">
     <div class="title-all">
       <h3 class="title">{{ msAuthStep === 1 ? $t('msAuth.inkAuthorization') : $t('msAuth.registerVip') }}</h3>
     </div>
@@ -21,7 +21,6 @@
       <el-form-item prop="inkId">
         <el-input
           v-model.trim="dataForm.inkId"
-          type="password"
           clearable
         >
           <div class="input-pre-text input-pre-text-150" slot="prepend">{{ $t('msAuth.inkNumber') }}</div>
@@ -224,11 +223,11 @@ export default {
         loading.close()
         if (data.code == 200) {
           const userInfo = {
-            corporateName: data.data.corporateName,
-            realName: data.data.realName,
+            corporateName: data.data.corporate_name,
+            realName: data.data.real_name,
             phone: data.data.phone,
             email: data.data.email,
-            countryId: data.data.countryId,
+            countryId: (data.data.country || data.data.countryId) + '',
             countryName: data.data.countryName,
             region: data.data.region
           }
@@ -249,6 +248,7 @@ export default {
           getMsCaptcha(params).then(({ data }) => {
             this.authLoading = false
             if (data.code == 39) {
+              this.$message.success(this.$t('common.successMsg'))
               this.isDisable = true
               this.captchaKey = data.data.authorizedCode
               this.captchaTime = 30
@@ -280,11 +280,15 @@ export default {
     vipDataFormSubmit () {
       this.$refs['vipDataForm'].validate((valid) => {
         if (valid) {
-          const params = { ...this.vipDataForm }
+          const params = {
+            ...this.vipDataForm,
+            country: this.vipDataForm.countryId
+          }
           this.vipLoading = true
           vipRegister(params).then(({ data }) => {
             this.vipLoading = false
             if (data.code == 14) {
+              this.$message.success(this.$t('common.successMsg'))
               this.userInfo = { ...this.vipDataForm }
               this.msAuthStep = 1
             } else {
@@ -335,10 +339,13 @@ export default {
   top: 50%;
   left: 50%;
   padding: 30px 60px 20px;
-  width: 600px;
+  width: 700px;
   transform: translate(-50%, -50%);
   background: rgba(0, 0, 0, 0.3) !important;
   border-radius: 5px;
+  &-2 {
+    width: 600px;
+  }
   input::-webkit-input-placeholder{
     color:#909399;
   }

@@ -147,6 +147,7 @@ export default {
           getEmailCaptcha(params).then(({ data }) => {
             this.authLoading = false
             if (data.code == 11) {
+              this.$message.success(this.$t('common.successMsg'))
               this.isDisable = true
               this.captchaTime = 30
               let timeFlag = setInterval(() => {
@@ -174,6 +175,7 @@ export default {
           forget(params).then(({ data }) => {
             this.loading = false
             if (data.code == 10) {
+              this.$message.success(this.$t('common.successMsg'))
               this.$router.replace({ name: 'login' })
             } else {
               this.$message.error(this.$t(`serverErrorMsg.${data.code}`))
