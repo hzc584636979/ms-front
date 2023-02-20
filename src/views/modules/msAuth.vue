@@ -245,7 +245,7 @@ export default {
             realName: data.data.real_name,
             phone: data.data.phone,
             email: data.data.email,
-            countryId: (data.data.country || data.data.countryId) + '',
+            countryId: data.data.country ? data.data.country + '' : '',
             countryName: data.data.countryName,
             region: data.data.region
           }
@@ -378,12 +378,13 @@ export default {
     margin-bottom: -5px;
     .tips{
       color: #d2d2d2;
-      font-size: 12px;
+      font-size: 14px;
     }
     .forget-btn {
       float: right;
       span {
         color: rgb(244, 220, 1);
+        font-size: 16px;
       }
       &:hover {
         transform: scale(1.2, 1.2);

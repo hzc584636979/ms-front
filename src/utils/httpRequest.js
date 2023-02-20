@@ -16,7 +16,7 @@ const http = axios.create({
  * 请求拦截
  */
 http.interceptors.request.use(config => {
-  config.headers['Authorization'] = 'bearer ' + sessionStorage.getItem('token') || localStorage.getItem('token') // 请求头带上token
+  config.headers['Authorization'] = 'bearer ' + (sessionStorage.getItem('token') || localStorage.getItem('token')) // 请求头带上token
   return config
 }, error => {
   return Promise.reject(error)
@@ -26,7 +26,7 @@ http.interceptors.request.use(config => {
  * 响应拦截
  */
 http.interceptors.response.use(response => {
-  if (response.data && response.data.code === '17') { // 17, 登录信息失效
+  if (response.data && response.data.code == 17) { // 17, 登录信息失效
     clearLoginInfo()
     router.push({ name: 'login' })
   }

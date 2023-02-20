@@ -80,7 +80,7 @@ export default {
         username: '',
         pwd: ''
       },
-      isRememb: false,
+      isRememb: true,
       dataRule: {
         username: [
           { validator: validateAccount, trigger: 'blur' }
