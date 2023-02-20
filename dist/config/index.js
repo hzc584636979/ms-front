@@ -18,7 +18,7 @@
  */
 ;(function () {
   var resList = {
-    icon: window.SITE_CONFIG.cdnUrl + '/static/img/favicon.ico',
+    icon: window.SITE_CONFIG.cdnUrl + '/static/img/favicon.png',
     css: [
       window.SITE_CONFIG.cdnUrl + '/static/css/loading.css',
       window.SITE_CONFIG.cdnUrl + '/static/css/app.css'
