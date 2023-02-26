@@ -33,7 +33,11 @@ const lang = {
     36: 'Wrong ink type',
     37: 'Authorization exception, please contact the administrator!',
     38: 'Existing authorization code',
-    39: 'Authorization code succeeded'
+    39: 'Authorization code succeeded',
+    40: 'Incorrect ink coding length',
+    41: 'Incorrect name of ink coding ink',
+    42: 'Ink encoding parsing failed',
+    43: 'The ink coding ink type is incorrect'
   },
   common: {
     account: 'Account',
