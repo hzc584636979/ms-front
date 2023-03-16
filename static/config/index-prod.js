@@ -4,9 +4,6 @@
 ;(function () {
   window.SITE_CONFIG = {}
 
-  // api接口请求地址
-  window.SITE_CONFIG['baseUrl'] = 'http://124.71.46.129:880/api'
-
   // cdn地址 = 域名 + 版本号
   window.SITE_CONFIG['domain'] = './' // 域名
   window.SITE_CONFIG['version'] = ''   // 版本号(年月日时分)

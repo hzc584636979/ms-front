@@ -58,6 +58,7 @@
 <script>
 import { loginIn } from '@/api/account'
 import { isUserName, isPassWord } from '@/utils/validate'
+// console.log(process.env.BASE_NAME)
 export default {
   data () {
     let validateAccount = (rule, value, callback) => {

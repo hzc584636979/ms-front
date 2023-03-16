@@ -2,15 +2,10 @@
   "name": "ms-front",
   "version": "1.0.0",
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "start": "npm run dev",
-    "unit": "jest --config test/unit/jest.conf.js --coverage",
-    "e2e": "node test/e2e/runner.js",
-    "test": "npm run unit && npm run e2e",
-    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
-    "build": "gulp",
-    "build_qa": "cross-env npm_config_qa=1 gulp",
-    "build_uat": "cross-env npm_config_uat=1 gulp"
+    "dev_nc": "cross-env npm_config_website=nc webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "dev_ch": "cross-env npm_config_website=ch webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "build_nc": "cross-env npm_config_website=nc gulp",
+    "build_ch": "cross-env npm_config_website=ch gulp"
   },
   "dependencies": {
     "@antv/g6": "^3.8.5",
