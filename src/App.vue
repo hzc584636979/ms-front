@@ -1,5 +1,12 @@
 <template>
-  <div class="site-wrapper" :class="{ 'site-wrapper--login': $route.name === 'login' }" v-if="$store.state.common.language">
+  <div
+    class="site-wrapper"
+    :class="{
+      'site-wrapper--login': $store.state.common.processEnv.BASE_NAME == 'nc' && $route.name === 'login',
+      'site-wrapper--mt': $store.state.common.processEnv.BASE_NAME == 'mt'
+    }"
+    v-if="$store.state.common.language"
+  >
     <div class="login-out">
       <el-select v-model="language" @change="languageHandle" style="width: 100px;">
         <el-option
@@ -35,6 +42,7 @@ export default {
     }
   },
   mounted () {
+    this.$store.commit('common/updateProcessEnv', process.env)
     this.removeLoading()
   },
   methods: {
@@ -96,6 +104,11 @@ export default {
   &--login {
     &:before {
       background-image: url(~@/assets/img/login_bg.jpg);
+    }
+  }
+  &--mt {
+    &:before {
+      background-image: url(~@/assets/img/global_bg_mt.jpg);
     }
   }
   .site-content__wrapper {
