@@ -58,6 +58,7 @@ const lang = {
   },
   home: {
     serveName: 'UVA3MAX Ink Activation System',
+    serveNameMt: 'Ink Activation System',
     signOrReg: 'Sign in and register'
   },
   login: {

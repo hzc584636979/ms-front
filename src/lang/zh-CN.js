@@ -58,6 +58,7 @@ const lang = {
   },
   home: {
     serveName: 'UVA3MAX墨水激活系统',
+    serveNameMt: '墨水激活系统',
     signOrReg: '登录注册'
   },
   login: {

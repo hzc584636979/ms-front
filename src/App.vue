@@ -3,7 +3,8 @@
     class="site-wrapper"
     :class="{
       'site-wrapper--login': $store.state.common.processEnv.BASE_NAME == 'nc' && $route.name === 'login',
-      'site-wrapper--mt': $store.state.common.processEnv.BASE_NAME == 'mt'
+      'site-wrapper--mt': $store.state.common.processEnv.BASE_NAME == 'mt',
+      'site-wrapper--mt--nologin--home': $store.state.common.processEnv.BASE_NAME == 'mt' && $route.name === 'home' && !token
     }"
     v-if="$store.state.common.language"
   >
@@ -109,6 +110,13 @@ export default {
   &--mt {
     &:before {
       background-image: url(~@/assets/img/global_bg_mt.jpg);
+    }
+    &--nologin--home {
+      &:before {
+        background-image: url(~@/assets/img/home_nologin_bg_mt.jpg);
+        background-position: center center;
+        background-size: auto;
+      }
     }
   }
   .site-content__wrapper {

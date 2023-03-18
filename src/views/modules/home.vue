@@ -1,17 +1,35 @@
 <template>
   <div>
-    <div class="home-main" v-if="!token">
-      <div class="home-area">
-        <img class="msImg" src="~@/assets/img/login_i1.png" alt="">
-        <div class="desc">
-          <div class="title">{{ $t('home.serveName') }}</div>
-          <el-button
-            class="login-btn"
-            type="primary"
-            @click="$router.push('/login')"
-          >{{ $t('home.signOrReg') }}</el-button>
+    <div v-if="!token">
+      <template v-if="$store.state.common.processEnv.BASE_NAME == 'nc'">
+        <div class="home-main">
+          <div class="home-area" >
+            <img class="msImg" src="~@/assets/img/login_i1.png" alt="">
+            <div class="desc">
+              <div class="title">{{ $t('home.serveName') }}</div>
+              <el-button
+                  class="login-btn"
+                  type="primary"
+                  @click="$router.push('/login')"
+              >{{ $t('home.signOrReg') }}</el-button>
+            </div>
+          </div>
         </div>
-      </div>
+      </template>
+      <template v-if="$store.state.common.processEnv.BASE_NAME == 'mt'">
+        <div class="home-main-mt">
+          <div class="home-area">
+            <div class="desc">
+              <div class="title">{{ $t('home.serveNameMt') }}</div>
+              <el-button
+                  class="login-btn"
+                  type="primary"
+                  @click="$router.push('/login')"
+              >{{ $t('home.signOrReg') }}</el-button>
+            </div>
+          </div>
+        </div>
+      </template>
     </div>
     <ms-auth v-else />
   </div>
@@ -57,6 +75,28 @@ export default {
       text-align: center;
       .title {
         font-size: 30px;
+      }
+      .login-btn {
+        min-width: 200px;
+        height: 50px;
+        margin-top: 20px;
+        font-size: 18px;
+      }
+    }
+  }
+}
+.home-main-mt {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-110%, -128%);
+  .home-area {
+    .desc {
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0));
+      width: 500px;
+      padding: 10px 0 20px 40px;
+      .title {
+        font-size: 56px;
       }
       .login-btn {
         min-width: 200px;

@@ -4,12 +4,10 @@
 ;(function () {
   window.SITE_CONFIG = {}
 
-  // api接口请求地址
-  window.SITE_CONFIG['baseUrl'] = 'http://124.71.46.129:880/api'
-
   // cdn地址 = 域名 + 版本号
+  window.SITE_CONFIG['siteName'] = 'mt' // 编译平台
   window.SITE_CONFIG['domain'] = './' // 域名
-  window.SITE_CONFIG['version'] = '2302261634'   // 版本号(年月日时分)
+  window.SITE_CONFIG['version'] = '2303182100'   // 版本号(年月日时分)
   window.SITE_CONFIG['cdnUrl'] = window.SITE_CONFIG.domain + window.SITE_CONFIG.version
 })()
 
@@ -18,7 +16,7 @@
  */
 ;(function () {
   var resList = {
-    icon: window.SITE_CONFIG.cdnUrl + '/static/img/favicon.png',
+    icon: window.SITE_CONFIG.cdnUrl + '/static/img/favicon_' + window.SITE_CONFIG.siteName + '.png',
     css: [
       window.SITE_CONFIG.cdnUrl + '/static/css/loading.css',
       window.SITE_CONFIG.cdnUrl + '/static/css/app.css'

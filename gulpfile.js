@@ -37,10 +37,11 @@ gulp.task('replace:cdnUrl', ['create:versionCatalog'], function () {
     .pipe(gulp.dest(`${versionPath}/static/js/`))
 });
 
-// 替换${versionPath}/static/config/index-${env}.js window.SITE_CONFIG['version']配置变量
+// 替换${versionPath}/static/config/index-${env}.js window.SITE_CONFIG['version']、window.SITE_CONFIG['siteName']配置变量
 gulp.task('replace:version', ['create:versionCatalog'], function () {
   return gulp.src(`${versionPath}/static/config/index-${env}.js`)
     .pipe($.replace(/window.SITE_CONFIG\['version'\] = '.*'/g, `window.SITE_CONFIG['version'] = '${version}'`))
+    .pipe($.replace(/window.SITE_CONFIG\['siteName'\] = '.*'/g, `window.SITE_CONFIG['siteName'] = '${process.env.npm_config_website}'`))
     .pipe(gulp.dest(`${versionPath}/static/config/`))
 });
 
