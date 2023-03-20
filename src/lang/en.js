@@ -45,7 +45,7 @@ const lang = {
     login: 'Login',
     register: 'Register',
     forget: 'Forget',
-    retrievePassword: 'Retrieve password',
+    retrievePassword: 'Reset password',
     logout: 'Log out',
     confirm: 'Confirm',
     ruleLimitTips: 'Cannot be empty',
@@ -66,15 +66,15 @@ const lang = {
   },
   register: {
     email: 'Email',
-    confirmPassword: 'Age password',
-    confirmPasswordLimitTips: 'Age passwords are not the same'
+    confirmPassword: 'Confirm Password',
+    confirmPasswordLimitTips: 'Confirm passwords are not the same'
   },
   forget: {
-    newPassword: 'New password',
-    confirmPassword: 'Age password',
-    confirmPasswordLimitTips: 'Age passwords are not the same',
-    emailCode: 'Email code',
-    getCode: 'Get code',
+    newPassword: 'New Password',
+    confirmPassword: 'Confirm Password',
+    confirmPasswordLimitTips: 'Confirm passwords are not the same',
+    emailCode: 'Email Code',
+    getCode: 'Get Code',
     emailCodeLimitTips: 'Email verification code error'
   },
   msAuth: {

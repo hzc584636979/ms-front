@@ -4,6 +4,7 @@ var path = require('path');
 var del  = require('del');
 
 var distPath    = path.resolve('./dist');
+var siteName     = ''; // 编译平台
 var version     = ''; // 版本号
 var versionPath = ''; // 版本号路径
 var env         = ''; // 运行环境
@@ -16,9 +17,10 @@ var env         = ''; // 运行环境
   var DD = d.getDate() >= 10 ? d.getDate() : '0' + d.getDate();
   var h  = d.getHours() >= 10 ? d.getHours() : '0' + d.getHours();
   var mm = d.getMinutes() >= 10 ? d.getMinutes() : '0' + d.getMinutes();
+  siteName = process.env.npm_config_website;
   version = yy + MM + DD + h + mm;
   //version = 'V1';
-  versionPath = distPath + '/' + version;
+  versionPath = distPath + '/' + version + '_' + siteName;
 })();
 
 // 编译
@@ -41,7 +43,7 @@ gulp.task('replace:cdnUrl', ['create:versionCatalog'], function () {
 gulp.task('replace:version', ['create:versionCatalog'], function () {
   return gulp.src(`${versionPath}/static/config/index-${env}.js`)
     .pipe($.replace(/window.SITE_CONFIG\['version'\] = '.*'/g, `window.SITE_CONFIG['version'] = '${version}'`))
-    .pipe($.replace(/window.SITE_CONFIG\['siteName'\] = '.*'/g, `window.SITE_CONFIG['siteName'] = '${process.env.npm_config_website}'`))
+    .pipe($.replace(/window.SITE_CONFIG\['siteName'\] = '.*'/g, `window.SITE_CONFIG['siteName'] = '${siteName}'`))
     .pipe(gulp.dest(`${versionPath}/static/config/`))
 });
 

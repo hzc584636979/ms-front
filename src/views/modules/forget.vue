@@ -246,7 +246,7 @@ export default {
     padding: 0 10px;
   }
   .input-pre-text {
-    width: 80px;
+    width: 110px;
     text-align: justify;
     text-align-last: justify;
   }
