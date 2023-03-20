@@ -11,11 +11,9 @@ body {
   background-color: #fff;
 }
 a {
-  color: mix(#fff, $--color-primary, 20%);
   text-decoration: none;
   &:focus,
   &:hover {
-    color: $--color-primary;
     text-decoration: underline;
   }
 }

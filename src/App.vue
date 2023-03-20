@@ -2,7 +2,8 @@
   <div
     class="site-wrapper"
     :class="{
-      'site-wrapper--login': $store.state.common.processEnv.BASE_NAME == 'nc' && $route.name === 'login',
+      'site-wrapper--nc': $store.state.common.processEnv.BASE_NAME == 'nc',
+      'site-wrapper--nc--login': $store.state.common.processEnv.BASE_NAME == 'nc' && $route.name === 'login',
       'site-wrapper--mt': $store.state.common.processEnv.BASE_NAME == 'mt',
       'site-wrapper--mt--nologin--home': $store.state.common.processEnv.BASE_NAME == 'mt' && $route.name === 'home' && !token
     }"
@@ -102,9 +103,11 @@ export default {
     background-image: url(~@/assets/img/global_bg.jpg);
     background-size: cover;
   }
-  &--login {
-    &:before {
-      background-image: url(~@/assets/img/login_bg.jpg);
+  &--nc {
+    &--login {
+      &:before {
+        background-image: url(~@/assets/img/login_bg.jpg);
+      }
     }
   }
   &--mt {

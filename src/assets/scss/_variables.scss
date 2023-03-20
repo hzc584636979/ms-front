@@ -1,15 +1,48 @@
 // 站点主色
-// tips: 要达到整站主题修改效果, 请确保[$--color-primary]站点主色与[/src/element-ui-theme/index.js]文件中[import './element-[#17B3A3]/index.css']当前主题色一致
-$--color-primary: #2093f7;
+$--theme: (
+  nc--color-primary: #2093f7,
+  mt--color-primary: #000000
+);
 
-// Sidebar
-$sidebar--background-color-dark: #232631;
-$sidebar--text-color-dark: #1c1f29;
+@function setTheme($n){
+  @return map-get($--theme, #{$n}--color-primary)
+}
 
-$sidebar--background-color-light: #FFF;
-$sidebar--text-color-light: #303133;
-$sidebar--background-color-hover-light: #eef5fe;
-$sidebar--text-color-hover-light: #1c1f29;
+@mixin color-mixin($n) {
+  a {
+    color: mix(#fff, setTheme($n), 20%);
+    &:focus,
+    &:hover {
+      color: setTheme($n);
+    }
+  }
+  .el-button--primary {
+    background-color: setTheme($n);
+    border: 1px solid setTheme($n);
+  }
+  .captcha-btn {
+    height: 40px;
+    border: 0;
+    background-color: setTheme($n)!important;
+    color: #fff!important;
+  }
+  .el-checkbox__input.is-checked .el-checkbox__inner,
+  .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+    border-color: setTheme($n);
+    background-color: setTheme($n);
+  }
+  .el-checkbox__inner:hover {
+    border-color: setTheme($n);
+  }
+  .el-checkbox__input.is-focus .el-checkbox__inner {
+    border-color: setTheme($n);
+  }
+}
 
-// Content
-$content--background-color: #F8FBFC;
+.site-wrapper--nc {
+  @include color-mixin(nc);
+}
+
+.site-wrapper--mt {
+  @include color-mixin(mt);
+}

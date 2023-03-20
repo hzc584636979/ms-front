@@ -233,12 +233,6 @@ export default {
     .el-input-group__append {
       border-right: 0;
     }
-    .captcha-btn {
-      height: 40px;
-      border: 0!important;
-      background-color: #3a8ee6!important;
-      color: #fff!important;
-    }
   }
   .btn-wrap {
     display: flex;
