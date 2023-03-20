@@ -2,10 +2,10 @@
   <div
     class="site-wrapper"
     :class="{
-      'site-wrapper--nc': $store.state.common.processEnv.BASE_NAME == 'nc',
-      'site-wrapper--nc--login': $store.state.common.processEnv.BASE_NAME == 'nc' && $route.name === 'login',
-      'site-wrapper--mt': $store.state.common.processEnv.BASE_NAME == 'mt',
-      'site-wrapper--mt--nologin--home': $store.state.common.processEnv.BASE_NAME == 'mt' && $route.name === 'home' && !token
+      'site-wrapper--nc': processEnv.BASE_NAME == 'nc',
+      'site-wrapper--nc--login': processEnv.BASE_NAME == 'nc' && $route.name === 'login',
+      'site-wrapper--mt': processEnv.BASE_NAME == 'mt',
+      'site-wrapper--mt--nologin--home': processEnv.BASE_NAME == 'mt' && $route.name === 'home' && !token
     }"
     v-if="$store.state.common.language"
   >
@@ -33,6 +33,11 @@
 <script>
 import { clearLoginInfo } from '@/utils'
 export default {
+  provide () {
+    return {
+      processEnv: this.processEnv
+    }
+  },
   data () {
     return {
       resetViews: true,
@@ -67,6 +72,11 @@ export default {
     }
   },
   computed: {
+    processEnv: {
+      get () {
+        return process.env
+      }
+    },
     token () {
       return this.$store.state.user.token
     },

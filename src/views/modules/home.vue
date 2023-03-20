@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="!token">
-      <template v-if="$store.state.common.processEnv.BASE_NAME == 'nc'">
+      <template v-if="processEnv.BASE_NAME == 'nc'">
         <div class="home-main">
           <div class="home-area" >
             <img class="msImg" src="~@/assets/img/login_i1.png" alt="">
@@ -16,7 +16,7 @@
           </div>
         </div>
       </template>
-      <template v-if="$store.state.common.processEnv.BASE_NAME == 'mt'">
+      <template v-if="processEnv.BASE_NAME == 'mt'">
         <div class="home-main-mt">
           <div class="home-area">
             <div class="desc">
@@ -38,6 +38,7 @@
 <script>
 import msAuth from './msAuth'
 export default {
+  inject: ['processEnv'],
   components: {
     msAuth
   },
